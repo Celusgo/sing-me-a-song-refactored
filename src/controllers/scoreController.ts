@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
 import { idSchema } from '../schemas/songIdSchema';
-import { searchSongById } from '../repositories/recommendationRepository';
+import { searchSongById, ResponseSong } from '../repositories/recommendationRepository';
 import { thumbsUp, thumbsDown } from '../repositories/scoreRepository';
 
 async function upVote (req: Request, res: Response) {
@@ -11,7 +11,7 @@ async function upVote (req: Request, res: Response) {
     if (validate.error) return res.sendStatus(400);
 
     try {
-        const findSong = await searchSongById(id);
+        const findSong: ResponseSong = await searchSongById(id);
         
         if (!findSong) return res.sendStatus(400);
 
@@ -32,7 +32,7 @@ async function downVote (req:Request, res:Response) {
     if(validate.error) return res.sendStatus(400);
 
     try {
-        const findSong = await searchSongById(id);
+        const findSong: ResponseSong = await searchSongById(id);
 
         if(!findSong) return res.sendStatus(400);
         

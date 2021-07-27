@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { newSongSchema } from '../schemas/newSongSchema';
 import { amountSchema } from '../schemas/songIdSchema';
-import { insertSong, searchForExistingSong, higherScoreSongs, NewSong } from '../repositories/recommendationRepository';
+import { insertSong, searchForExistingSong, higherScoreSongs, NewSong, ResponseSong } from '../repositories/recommendationRepository';
 import { giveRandomSong } from '../services/recommendationService';
 
 async function addNewSong(req: Request, res: Response) {
@@ -12,7 +12,7 @@ async function addNewSong(req: Request, res: Response) {
     if (validate.error) return res.sendStatus(400);
 
     try {
-        const checkIfExists = await searchForExistingSong(name);
+        const checkIfExists: ResponseSong = await searchForExistingSong(name);
 
         if (checkIfExists) return res.sendStatus(409);
 
@@ -27,7 +27,7 @@ async function addNewSong(req: Request, res: Response) {
 
 async function randomSong (req:Request, res:Response) {
     try{
-        const random = await giveRandomSong()
+        const random: ResponseSong = await giveRandomSong()
         if(!random) return res.sendStatus(404);
         res.status(200).send(random);
     }
@@ -48,7 +48,7 @@ async function topSongs(req: Request, res: Response) {
     
 
     try{
-        const request = await higherScoreSongs(amount)
+        const request: ResponseSong[] = await higherScoreSongs(amount)
 
         if(request.length === 0) return res.sendStatus(404);
 
