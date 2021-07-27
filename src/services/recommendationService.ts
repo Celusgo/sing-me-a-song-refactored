@@ -1,6 +1,6 @@
-import { songsList } from '../repositories/recommendationRepository';
+import { songsList, ResponseSong } from '../repositories/recommendationRepository';
 
-async function giveRandomSong() {
+async function giveRandomSong(): Promise<ResponseSong> {
 
     function refference() { 
         return Math.random() - 0.5; 
@@ -8,7 +8,7 @@ async function giveRandomSong() {
 
     const list = await songsList();
  
-    let filteredList:string[];
+    let filteredList:ResponseSong[];
 
     if (list.length === 0) return null;
 
